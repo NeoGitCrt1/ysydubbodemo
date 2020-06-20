@@ -12,11 +12,11 @@ import ysy.dubbo.demo.s1.api.dto.M2;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// 尽量在服务端配置超时
-@DubboService(methods = {
-        @Method(name = "acyncHello", timeout = 5000),
-        @Method(name = "asyncTask", timeout = 5000)
-})
+//// 尽量在服务端配置超时
+//@DubboService(methods = {
+//        @Method(name = "acyncHello", timeout = 5000),
+//        @Method(name = "asyncTask", timeout = 5000)
+//})
 public class DemoServiceImpl implements DemoService {
     private static final Logger LOG = LoggerFactory.getLogger(DemoServiceImpl.class);
     private final AtomicInteger ct = new AtomicInteger();
