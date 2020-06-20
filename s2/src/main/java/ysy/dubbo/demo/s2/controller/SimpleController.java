@@ -1,9 +1,7 @@
 package ysy.dubbo.demo.s2.controller;
 
-import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.rpc.RpcContext;
-import org.apache.dubbo.rpc.service.EchoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,25 +17,34 @@ import java.util.concurrent.CompletableFuture;
 public class SimpleController {
 
 
-    @DubboReference(methods = {@Method(name = "acyncHello", async = true)})
-    private DemoService demoService;
+    @Autowired
+    private DemoService rpcDemo;
 
     @GetMapping("/h/{name}")
     public Mono<String> hi(@PathVariable String name) {
-        EchoService es = (EchoService) demoService;
-        Mono<String> res = Mono.just(demoService.sayHello(name));
-        Mono.just(es.$echo("OK")).log().subscribe();
+//        EchoService es = (EchoService) demoService;
+        Mono<String> res = Mono.just(rpcDemo.sayHello(name));
+//        Mono.just(es.$echo("OK")).log().subscribe();
         return res.log();
     }
 
     @GetMapping("/a/{name}")
     public Mono<M2> hia(@PathVariable String name) {
-        CompletableFuture<M2> helloFuture = null;
-        for (int i = 0; i < 5; i++) {
-            demoService.acyncHello(name);
-            helloFuture = RpcContext.getContext().getCompletableFuture();
+        for (int i = 0; i < 7; i++) {
+            rpcDemo.asyncTask(name);
         }
+        M2 fallback = rpcDemo.acyncHello(name);
+        // normally "fallback" must be null
+        if (fallback != null) {
+            // rpc exception happened
+            return Mono.just(fallback);
+        }
+        CompletableFuture<M2> helloFuture = RpcContext.getContext().getCompletableFuture();
 
-        return Mono.fromFuture(helloFuture).log();
+
+        return Mono
+                .fromFuture(helloFuture)
+                .onErrorReturn(new M2("Mansch"))
+                .log();
     }
 }

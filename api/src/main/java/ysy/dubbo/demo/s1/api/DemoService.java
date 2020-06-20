@@ -6,4 +6,6 @@ public interface DemoService {
     String sayHello(String name);
 
     M2 acyncHello(String name);
+
+    void asyncTask(String name);
 }
