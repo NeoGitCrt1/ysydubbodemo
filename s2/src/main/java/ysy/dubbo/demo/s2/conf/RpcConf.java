@@ -20,6 +20,9 @@ public class RpcConf {
             })
     private DemoService demoService;
 
+    /**
+     * 可能有好几个地方要注入DemoService， 在这边写一个@DubboReference的，然后暴露这个配置好的服务bean
+     */
     @Bean
     public DemoService rpcDemo() {
         return demoService;
