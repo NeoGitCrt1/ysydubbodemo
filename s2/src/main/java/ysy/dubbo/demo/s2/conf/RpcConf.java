@@ -13,7 +13,9 @@ public class RpcConf {
             check = false,
             mock = "ysy.dubbo.demo.s1.api.fallback.DemoServiceFallback",
             methods = {
+                    // 异步，需要返回值
                     @Method(name = "acyncHello", async = true),
+                    // 异步，不care返回值
                     @Method(name = "asyncTask", async = true, isReturn = false)
             })
     private DemoService demoService;

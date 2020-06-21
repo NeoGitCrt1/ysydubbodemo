@@ -16,6 +16,6 @@ public class DemoServiceFallback implements DemoService {
 
     @Override
     public void asyncTask(String name) {
-
+        // maybe throw a Exception or sth.
     }
 }

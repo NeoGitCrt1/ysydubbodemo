@@ -40,14 +40,16 @@ public class SimpleController {
         M2 fallback = rpcDemo.acyncHello(name);
         // normally "fallback" must be null
         if (fallback != null) {
-            // rpc exception happened
+            // rpc exception happened when calling
             return Mono.just(fallback);
         }
         CompletableFuture<M2> helloFuture = RpcContext.getContext().getCompletableFuture();
 
 
         return Mono
+                // normal
                 .fromFuture(helloFuture)
+                // rpc exception happened when fetching (e.g. timeout or sth.)
                 .onErrorReturn(new M2("Mansch"))
                 .log();
     }
