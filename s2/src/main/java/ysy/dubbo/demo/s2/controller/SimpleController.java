@@ -1,5 +1,6 @@
 package ysy.dubbo.demo.s2.controller;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/s2")
 public class SimpleController {
 
+    @NacosValue(value = "${useLocalCache:false}", autoRefreshed = true)
+    private boolean useLocalCache;
+
 
     @Autowired
     private DemoService rpcDemo;
@@ -23,7 +27,7 @@ public class SimpleController {
     @GetMapping("/h/{name}")
     public Mono<String> hi(@PathVariable String name) {
 //        EchoService es = (EchoService) demoService;
-        Mono<String> res = Mono.just(rpcDemo.sayHello(name));
+        Mono<String> res = Mono.just(rpcDemo.sayHello(name) + useLocalCache);
 //        Mono.just(es.$echo("OK")).log().subscribe();
         return res.log();
     }

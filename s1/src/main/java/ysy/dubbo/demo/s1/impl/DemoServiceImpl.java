@@ -1,7 +1,5 @@
 package ysy.dubbo.demo.s1.impl;
 
-import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.rpc.AsyncContext;
 import org.apache.dubbo.rpc.RpcContext;
 import org.slf4j.Logger;
@@ -12,6 +10,12 @@ import ysy.dubbo.demo.s1.api.dto.M2;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+/**
+ * see kotlin folder
+ */
+
+
 //// 尽量在服务端配置超时
 //@DubboService(methods = {
 //        @Method(name = "acyncHello", timeout = 5000),
@@ -20,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DemoServiceImpl implements DemoService {
     private static final Logger LOG = LoggerFactory.getLogger(DemoServiceImpl.class);
     private final AtomicInteger ct = new AtomicInteger();
+
     @Override
     public String sayHello(String name) {
         ct.set(0);

@@ -32,12 +32,13 @@ class DemoServiceImplK : DemoService {
             var pp1: Long = 0
             var p1: Long = 1
             var now: Long = 0
-            for (i in 2 until name.length + 64) {
+            val end = ThreadLocalRandom.current().nextInt(64) + name.length
+            for (i in 2 until end) {
                 now = pp1 + p1
                 pp1 = p1
                 p1 = now
             }
-            LOG.info("acyncHello:{}> {}", id, now)
+            LOG.info("acyncHello:{}> {}> {}", id, now, end)
 
             // 如果要使用上下文，则必须要放在第一句执行
             asyncContext.signalContextSwitch()
@@ -47,13 +48,10 @@ class DemoServiceImplK : DemoService {
         null
     }
 
-    private val tr = ThreadLocalRandom.current()
-
     override fun asyncTask(name: String): Unit = runBlocking<Unit> {
         val id = ct.incrementAndGet()
-        launch {
-            delay(tr.nextLong(5000))
-            LOG.info("TASK {} DONE", id)
-        }
+        val sleep = ThreadLocalRandom.current().nextLong(5000)
+        delay(sleep)
+        LOG.info("TASK {} DONE ELAPSED {}ms", id, sleep)
     }
 }
